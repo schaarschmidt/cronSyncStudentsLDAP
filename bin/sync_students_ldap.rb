@@ -40,7 +40,7 @@ class SyncStudentsLDAP < Thor
 
     unless 0 == missing_entries.size
       puts "[ERROR] there are missing entries left."
-      puts "[ERROR] run 'physik_ldap new' first"
+      puts "[ERROR] run 'sync_students_ldap new' first"
       exit
     end
 
