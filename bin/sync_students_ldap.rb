@@ -18,6 +18,12 @@ class SyncStudentsLDAP < Thor
   UMT_ACCOUNT_BY_UID_HASH  = 'students:h_accounts_by_uid'
   UMT_ACCOUNT_BY_CHECKSUM_HASH  = 'students:h_accounts_by_checksum'
 
+  desc 'refresh','refresh the database in the idms'
+  def refresh
+    connect_umt
+    plsql.students_pkg.refreshStudentsTbl;
+  end
+
   desc 'new','add all missing accounts to the ldap'
   def new
     cleanup_redis_db
