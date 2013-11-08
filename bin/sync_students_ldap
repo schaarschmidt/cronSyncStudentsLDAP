@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
 
 require 'thor'
 require 'ruby-plsql'
@@ -50,9 +52,12 @@ class SyncStudentsLDAP < Thor
       exit
     end
 
+    counter = 0
     update_candidates.each do |checksum|
       write_update_entry checksum
+      counter += 1
     end
+    puts "#{counter} Eintraege aktualisiert"
   end
 
 private
