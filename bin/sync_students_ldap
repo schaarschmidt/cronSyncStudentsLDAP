@@ -75,10 +75,10 @@ private
   def connect_ldap
     unless @ldap
       @ldap = Net::LDAP.new
-      @ldap.host = ENV.fetch('LDAP2_ITZ_HOST')
-      @ldap.port = ENV.fetch('LDAP2_ITZ_PORT')
-#      @ldap.encryption :simple_tls
-      @ldap.auth ENV.fetch('LDAP2_ITZ_USER'), ENV.fetch('LDAP2_ITZ_PASSWORD')
+      @ldap.host = ENV.fetch('LDAP1_ITZ_HOST')
+      @ldap.port = ENV.fetch('LDAP1_ITZ_PORT')
+      @ldap.encryption :simple_tls
+      @ldap.auth ENV.fetch('LDAP1_ITZ_USER'), ENV.fetch('LDAP1_ITZ_PASSWORD')
     end
   end
 
