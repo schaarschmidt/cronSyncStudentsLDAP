@@ -66,7 +66,7 @@ private
   end
 
   def connect_umt
-    plsql.connection = OCI8.new(
+    plsql.connection ||= OCI8.new(
       ENV.fetch('UMT_USER'),
       ENV.fetch('UMT_PASSWORD'),
       ENV.fetch('UMT_SID'))
@@ -74,7 +74,7 @@ private
 
   def connect_ldap
     unless @ldap
-      @ldap = Net::LDAP.new
+      @ldap ||= Net::LDAP.new
       @ldap.host = ENV.fetch('LDAP1_ITZ_HOST')
       @ldap.port = ENV.fetch('LDAP1_ITZ_PORT')
       @ldap.encryption :simple_tls
