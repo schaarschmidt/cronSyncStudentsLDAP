@@ -29,8 +29,18 @@ class SyncStudentsLDAP < Thor
   desc 'new','add all missing accounts to the ldap'
   def new
     cleanup_redis_db
-    fetch_umt
-    fetch_ldap
+
+    fork do
+      puts "lade Daten aus dem IDM"
+      fetch_idm
+    end
+
+    fork do 
+      puts "lade Daten aus dem LDAP"
+      fetch_ldap
+    end
+
+    Process.waitall
 
     counter = 0
     missing_entries.each do |uid|
@@ -43,8 +53,16 @@ class SyncStudentsLDAP < Thor
   desc "update","update ldap accounts"
   def update
     cleanup_redis_db
-    fetch_umt
-    fetch_ldap
+
+    #fork do
+      fetch_idm
+    #end
+
+    #fork do
+      fetch_ldap
+    #end
+
+    #Process.waitall 
 
     unless 0 == missing_entries.size
       puts "[ERROR] there are missing entries left."
@@ -62,7 +80,7 @@ class SyncStudentsLDAP < Thor
 
 private
   def connect_redis
-    @redis ||= Redis.new
+    @redis = Redis.new
   end
 
   def connect_umt
@@ -92,7 +110,7 @@ private
     @redis.del UMT_ACCOUNT_BY_UID_HASH
   end
 
-  def fetch_umt
+  def fetch_idm
     connect_umt
     connect_redis
 
