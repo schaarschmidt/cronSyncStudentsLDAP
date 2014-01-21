@@ -28,20 +28,7 @@ class SyncStudentsLDAP < Thor
 
   desc 'new','add all missing accounts to the ldap'
   def new
-    cleanup_redis_db
-
-    fork do
-      puts "lade Daten aus dem IDM"
-      fetch_idm
-    end
-
-    fork do 
-      puts "lade Daten aus dem LDAP"
-      fetch_ldap
-    end
-
-    Process.waitall
-
+    fetch_all
     counter = 0
     missing_entries.each do |uid|
       counter += 1
@@ -206,6 +193,24 @@ private
       end
       @redis.sadd LDAP_UID_SET,entry[:uid][0]
     end
+  end
+
+  def fetch_all
+    cleanup_redis_db
+
+    fork do
+      puts "lade Daten aus dem IDM"
+      fetch_idm
+      puts "IDM geladen"
+    end
+
+    fork do 
+      puts "lade Daten aus dem LDAP"
+      fetch_ldap
+      puts "LDAP geladen"
+    end
+
+    Process.waitall
   end
 
   def write_new_entry uid
